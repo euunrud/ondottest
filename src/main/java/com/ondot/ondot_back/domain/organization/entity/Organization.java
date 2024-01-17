@@ -4,6 +4,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
+import com.ondot.ondot_back.domain.organization.dto.OrganizationUpdateRequest;
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
 import com.ondot.ondot_back.global.common.BaseEntity;
 
@@ -74,4 +75,32 @@ public class Organization extends BaseEntity {
 	@Length(max = 140, message = "단체 설명은 140자 이하로 구성되어야 합니다.")
 	@Column(name = "organization_description")
 	private String description;
+
+	public Organization update(OrganizationUpdateRequest request) {
+		if (request.name() != null) {
+			this.name = request.name();
+		}
+
+		if (request.type() != null) {
+			this.type = OrganizationType.valueOf(request.type());
+		}
+
+		if (request.profileUrl() != null) {
+			this.profileUrl = request.profileUrl();
+		}
+
+		if (request.imageUrl() != null) {
+			this.imageUrl = request.imageUrl();
+		}
+
+		if (request.contact() != null) {
+			this.contact = request.contact();
+		}
+
+		if (request.description() != null) {
+			this.description = request.description();
+		}
+
+		return this;
+	}
 }
