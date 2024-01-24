@@ -28,6 +28,7 @@ dependencies {
 
 	// Database
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'junit:junit:4.13.1'
 	runtimeOnly 'org.postgresql:postgresql'
 
 	// Validator
@@ -44,6 +45,9 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	//Google
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

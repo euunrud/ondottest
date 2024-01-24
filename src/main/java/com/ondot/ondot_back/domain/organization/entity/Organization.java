@@ -33,74 +33,88 @@ import lombok.NonNull;
 @Table(name = "organization")
 public class Organization extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@NonNull
-	@Pattern(regexp = "^[a-zA-Z0-9]{4,16}$",
-		message = "단체 ID는 4~16자 사이의 영문과 숫자만 허용합니다.")
-	@Column(name = "organization_id", unique = true)
-	private String organizationId;
+//    @NonNull
+//    @Pattern(regexp = "^[a-zA-Z0-9]{4,16}$",
+//            message = "단체 ID는 4~16자 사이의 영문과 숫자만 허용합니다.")
+    @Column(name = "organization_id", unique = true)
+    private String organizationId;
 
-	@NonNull
-	@Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,12}$",
-		message = "단체 이름은 2~12자 사이의 영문, 한글, 숫자를 허용합니다.")
-	@Column(name = "organization_name")
-	private String name;
+    @NonNull
+//    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,12}$",
+//            message = "단체 이름은 2~12자 사이의 영문, 한글, 숫자를 허용합니다.")
+    @Column(name = "organization_name")
+    private String name;
 
-	@NonNull
-	@Length(min = 8, max = 20, message = "비밀번호는 8~20자 사이만 허용합니다.")
-	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$",
-		message = "비밀번호는 영문, 숫자, 특수기호(_ @ ? !)로 구성되어야 합니다.")
-	@Column(name = "organization_password")
-	private String password;
+//    @NonNull
+//    @Length(min = 8, max = 20, message = "비밀번호는 8~20자 사이만 허용합니다.")
+//    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$",
+//            message = "비밀번호는 영문, 숫자, 특수기호(_ @ ? !)로 구성되어야 합니다.")
+    @Column(name = "organization_password")
+    private String password;
 
-	@NonNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "organization_type")
-	private OrganizationType type;
+//    @NonNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "organization_type")
+    private OrganizationType type;
 
-	@NonNull
-	@Column(name = "organization_prifle_url")
-	private String profileUrl;
+//    @NonNull
+    @Column(name = "organization_prifle_url")
+    private String profileUrl;
 
-	@Column(name = "organization_image_url")
-	private String imageUrl;
+    @Column(name = "organization_image_url")
+    private String imageUrl;
 
-	@Length(max = 20, message = "대표자 연락처는 20자 이하로 구성되어야 합니다..")
-	@Column(name = "organization_contact")
-	private String contact;
+    @Length(max = 20, message = "대표자 연락처는 20자 이하로 구성되어야 합니다..")
+    @Column(name = "organization_contact")
+    private String contact;
 
-	@Length(max = 140, message = "단체 설명은 140자 이하로 구성되어야 합니다.")
-	@Column(name = "organization_description")
-	private String description;
+    @Length(max = 140, message = "단체 설명은 140자 이하로 구성되어야 합니다.")
+    @Column(name = "organization_description")
+    private String description;
 
-	public Organization update(OrganizationUpdateRequest request) {
-		if (request.name() != null) {
-			this.name = request.name();
-		}
 
-		if (request.type() != null) {
-			this.type = OrganizationType.valueOf(request.type());
-		}
+    // OAuth 로그인에 사용
+//    @Column(name = "auth_role")
+//    private String role; //ROLE_USER, ROLE_ADMIN
 
-		if (request.profileUrl() != null) {
-			this.profileUrl = request.profileUrl();
-		}
+    @Column(name = "auth_provider")
+    private String provider;
 
-		if (request.imageUrl() != null) {
-			this.imageUrl = request.imageUrl();
-		}
+    @Column(name = "auth_providerId")
+    private String providerId;
 
-		if (request.contact() != null) {
-			this.contact = request.contact();
-		}
+    public Organization update(OrganizationUpdateRequest request) {
+        if (request.name() != null) {
+            this.name = request.name();
+        }
 
-		if (request.description() != null) {
-			this.description = request.description();
-		}
+        if (request.type() != null) {
+            this.type = OrganizationType.valueOf(request.type());
+        }
 
-		return this;
-	}
+        if (request.profileUrl() != null) {
+            this.profileUrl = request.profileUrl();
+        }
+
+        if (request.imageUrl() != null) {
+            this.imageUrl = request.imageUrl();
+        }
+
+        if (request.contact() != null) {
+            this.contact = request.contact();
+        }
+
+        if (request.description() != null) {
+            this.description = request.description();
+        }
+
+        return this;
+    }
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
+    }
 }
