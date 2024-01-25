@@ -5,6 +5,8 @@ import com.ondot.ondot_back.domain.organization.repository.OrganizationJpaReposi
 import com.ondot.ondot_back.global.config.auth.PrincipalDetails;
 import com.ondot.ondot_back.global.config.oauth.provider.GoogleUserInfo;
 import com.ondot.ondot_back.global.config.oauth.provider.OAuth2UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -16,11 +18,11 @@ import java.util.Optional;
 @Service
 public class PrincipalOAuth2DetailsService extends DefaultOAuth2UserService {
     private final OrganizationJpaRepository organizationJpaRepository;
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public PrincipalOAuth2DetailsService(OrganizationJpaRepository organizationJpaRepository) {
+    public PrincipalOAuth2DetailsService(OrganizationJpaRepository organizationJpaRepository){
         this.organizationJpaRepository = organizationJpaRepository;
     }
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //    @Autowired
 //    public PrincipalOAuth2DetailsService(OrganizationJpaRepository organizationJpaRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {

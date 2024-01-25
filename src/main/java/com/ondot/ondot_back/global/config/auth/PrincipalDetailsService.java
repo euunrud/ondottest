@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-// signin 요청이 오면 자동으로 UserDetailService 타입으로 loc되어 이쓴 loadUserByUsername함수가 실행
+//http://localhost:8080/login =>signin 요청이 오면 자동으로 UserDetailService 타입으로 loadUserByUsername함수가 실행
 @Service
 public class PrincipalDetailsService implements UserDetailsService {
 
@@ -20,8 +20,8 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Organization organization = organizationJpaRepository.findByName(username);
-        if(organization != null){
+        Organization organization = organizationJpaRepository.findSingleByOrganizationId(username);
+        if(organization == null){
             return null;
         } else {
             return new PrincipalDetails(organization);

@@ -56,26 +56,30 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return orgaization.getName();
     }
 
+    // 계정 만료 (true = 만료 아님)
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    // 계정 잠금 여부
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    // 비밀번호가 기간이 지났니 오래사용한거 아니니 여부
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    // 계정 활성화 여부
     @Override
     public boolean isEnabled() {
         //사이트에서 1년동안 회원 로그인을 안하면 휴먼 계정 설정하려면 추가
-
-        return true;
+        //현재시간 - 로긴시간 => 1년을 초과하면 return false;
+        return true; // 활성화
     }
 
     // 리소스 서버로 부터 받는 회원정보

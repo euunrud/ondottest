@@ -1,5 +1,6 @@
 package com.ondot.ondot_back.domain.organization.entity;
 
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
@@ -17,11 +18,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @DynamicUpdate
 @DynamicInsert
@@ -29,6 +25,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
 @Table(name = "organization")
 public class Organization extends BaseEntity {
@@ -81,11 +78,55 @@ public class Organization extends BaseEntity {
 //    @Column(name = "auth_role")
 //    private String role; //ROLE_USER, ROLE_ADMIN
 
-    @Column(name = "auth_provider")
+    @Column(name = "organization_provider")
     private String provider;
 
-    @Column(name = "auth_providerId")
+    @Column(name = "organization_provider_id")
     private String providerId;
+
+    @Builder
+    public Organization(long id, String organizationId, String name, String password, OrganizationType type, String profileUrl, String imageUrl, String contact, String description, String provider, String providerId) {
+        this.id = id;
+        this.organizationId = organizationId;
+        this.name = name;
+        this.password = password;
+        this.type = type;
+        this.profileUrl = profileUrl;
+        this.imageUrl = imageUrl;
+        this.contact = contact;
+        this.description = description;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+    @Builder
+    public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl, String imageUrl, String contact, String description, String provider, String providerId) {
+        this.organizationId = organizationId;
+        this.name = name;
+        this.password = password;
+        this.type = type;
+        this.profileUrl = profileUrl;
+        this.imageUrl = imageUrl;
+        this.contact = contact;
+        this.description = description;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+    public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl) {
+        this.organizationId = organizationId;
+        this.name = name;
+        this.password = password;
+        this.type = type;
+        this.profileUrl = profileUrl;
+    }
+
+//    public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl, String none, String none1, String none2, String none3) {
+//        this.organizationId = organizationId;
+//        this.name = name;
+//        this.password = password;
+//        this.type = type;
+//        this.profileUrl = profileUrl;
+//    }
+
 
     public Organization update(OrganizationUpdateRequest request) {
         if (request.name() != null) {
@@ -114,7 +155,7 @@ public class Organization extends BaseEntity {
 
         return this;
     }
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
-    }
+//    public void setOrganizationId(String organizationId) {
+//        this.organizationId = organizationId;
+//    }
 }
