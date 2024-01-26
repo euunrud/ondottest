@@ -1,10 +1,8 @@
 package com.ondot.ondot_back.global.config.oauth.provider;
 
-import org.springframework.security.oauth2.core.user.OAuth2User;
-
 import java.util.Map;
 
-public class GoogleUserInfo  implements OAuth2UserInfo {
+public class GoogleUserInfo implements OAuth2UserInfo {
 
     private Map<String, Object> attributes;
 
@@ -31,4 +29,5 @@ public class GoogleUserInfo  implements OAuth2UserInfo {
     public String getName() {
         return (String) attributes.get("name");
     }
+
 }

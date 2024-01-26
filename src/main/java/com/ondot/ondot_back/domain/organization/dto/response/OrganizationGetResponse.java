@@ -1,4 +1,4 @@
-package com.ondot.ondot_back.domain.organization.dto;
+package com.ondot.ondot_back.domain.organization.dto.response;
 
 import com.ondot.ondot_back.domain.organization.entity.Organization;
 

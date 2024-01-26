@@ -1,4 +1,4 @@
-package com.ondot.ondot_back.domain.organization.dto;
+package com.ondot.ondot_back.domain.organization.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

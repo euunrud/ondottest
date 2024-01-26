@@ -1,11 +1,12 @@
 package com.ondot.ondot_back.domain.organization.entity;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
-import com.ondot.ondot_back.domain.organization.dto.OrganizationUpdateRequest;
+import com.ondot.ondot_back.domain.organization.dto.request.OrganizationUpdateRequest;
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
 import com.ondot.ondot_back.global.common.BaseEntity;
 
@@ -17,7 +18,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Pattern;
 
 @DynamicUpdate
 @DynamicInsert
@@ -46,7 +46,7 @@ public class Organization extends BaseEntity {
     @Column(name = "organization_name")
     private String name;
 
-//    @NonNull
+    @NonNull
 //    @Length(min = 8, max = 20, message = "비밀번호는 8~20자 사이만 허용합니다.")
 //    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$",
 //            message = "비밀번호는 영문, 숫자, 특수기호(_ @ ? !)로 구성되어야 합니다.")
@@ -73,16 +73,15 @@ public class Organization extends BaseEntity {
     @Column(name = "organization_description")
     private String description;
 
-
-    // OAuth 로그인에 사용
-//    @Column(name = "auth_role")
-//    private String role; //ROLE_USER, ROLE_ADMIN
-
     @Column(name = "organization_provider")
     private String provider;
 
     @Column(name = "organization_provider_id")
     private String providerId;
+
+    @Column(name = "organization_refreshtoken")
+    private String refreshToken;
+
 
     @Builder
     public Organization(long id, String organizationId, String name, String password, OrganizationType type, String profileUrl, String imageUrl, String contact, String description, String provider, String providerId) {
@@ -99,7 +98,7 @@ public class Organization extends BaseEntity {
         this.providerId = providerId;
     }
     @Builder
-    public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl, String imageUrl, String contact, String description, String provider, String providerId) {
+    public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl, String imageUrl, String contact, String description, String provider, String providerId, String refreshToken) {
         this.organizationId = organizationId;
         this.name = name;
         this.password = password;
@@ -110,6 +109,7 @@ public class Organization extends BaseEntity {
         this.description = description;
         this.provider = provider;
         this.providerId = providerId;
+        this.refreshToken = refreshToken;
     }
     public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl) {
         this.organizationId = organizationId;
@@ -119,13 +119,6 @@ public class Organization extends BaseEntity {
         this.profileUrl = profileUrl;
     }
 
-//    public Organization(String organizationId, String name, String password, OrganizationType type, String profileUrl, String none, String none1, String none2, String none3) {
-//        this.organizationId = organizationId;
-//        this.name = name;
-//        this.password = password;
-//        this.type = type;
-//        this.profileUrl = profileUrl;
-//    }
 
 
     public Organization update(OrganizationUpdateRequest request) {
@@ -155,7 +148,4 @@ public class Organization extends BaseEntity {
 
         return this;
     }
-//    public void setOrganizationId(String organizationId) {
-//        this.organizationId = organizationId;
-//    }
 }

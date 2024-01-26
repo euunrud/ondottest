@@ -19,8 +19,8 @@ import java.util.Date;
 public class JwtTokenProvider {
     private final long JWT_ACCESS_TOKEN_EXPTIME;
     private final long JWT_REFRESH_TOKEN_EXPTIME;
-    private final String  JWT_ACCESS_SECRET_KEY;
-    private final String  JWT_REFRESH_SECRET_KEY;
+    private final String JWT_ACCESS_SECRET_KEY;
+    private final String JWT_REFRESH_SECRET_KEY;
     private Key accessKey;
     private Key refreshKey;
 
@@ -44,43 +44,31 @@ public class JwtTokenProvider {
         this.refreshKey = Keys.hmacShaKeyFor(secretKeyBytes);
     }
 
-    // JWT 토큰 생성
     public String createAccessToken(Long userid) {
         System.out.println("JWT 토큰 생성");
-        Claims claims = Jwts.claims().setSubject(userid.toString()); // JWT payload 에 저장되는 정보단위, 보통 여기서 user를 식별하는 값을 넣는다.
+        Claims claims = Jwts.claims().setSubject(userid.toString());
 
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims) // 정보 저장
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + JWT_ACCESS_TOKEN_EXPTIME)) // set Expire Time
-                .signWith(accessKey, SignatureAlgorithm.HS256)  // 사용할 암호화 알고리즘과
-                // signature 에 들어갈 secret값 세팅
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + JWT_ACCESS_TOKEN_EXPTIME))
+                .signWith(accessKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String createRefreshToken(Long userid) {
-        System.out.println("createRefreshToken");
-
-        Claims claims = Jwts.claims().setSubject(userid.toString()); // JWT payload 에 저장되는 정보단위, 보통 여기서 user를 식별하는 값을 넣는다.
+        Claims claims = Jwts.claims().setSubject(userid.toString());
 
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims) // 정보 저장
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + JWT_REFRESH_TOKEN_EXPTIME)) // set Expire Time
-                .signWith(accessKey, SignatureAlgorithm.HS256) // 사용할 암호화 알고리즘과
-                // signature 에 들어갈 secret값 세팅
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + JWT_REFRESH_TOKEN_EXPTIME))
+                .signWith(accessKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    //    // JWT 토큰에서 인증 정보 조회
-//    public Authentication getAuthentication(String token) {
-//        PrincipalDetails userDetails = (PrincipalDetails) userDetailsService.loadUserByUsername(this.getUserid(token));
-//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//    }
-
-    // 토큰에서 회원 정보 추출
     public String getUseridFromAcs(String token) {
         return Jwts.parserBuilder().setSigningKey(accessKey).build()
                 .parseClaimsJws(token).getBody().getSubject();
@@ -92,11 +80,9 @@ public class JwtTokenProvider {
     }
 
     public Long getExpiration(String accessToken) {
-        // accessToken 남은 유효시간
         Date expiration = Jwts.parserBuilder().setSigningKey(accessKey).build().parseClaimsJws(accessToken).getBody().getExpiration();
-        // 현재 시간
+
         Long now = new Date().getTime();
         return expiration.getTime() - now;
     }
-
 }

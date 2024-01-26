@@ -3,7 +3,7 @@ package com.ondot.ondot_back.domain.organization.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ondot.ondot_back.domain.organization.dto.OrganizationUpdateRequest;
+import com.ondot.ondot_back.domain.organization.dto.request.OrganizationUpdateRequest;
 import com.ondot.ondot_back.domain.organization.entity.Organization;
 import com.ondot.ondot_back.domain.organization.repository.OrganizationRepository;
 

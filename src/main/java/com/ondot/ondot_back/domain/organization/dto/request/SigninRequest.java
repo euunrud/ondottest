@@ -1,4 +1,4 @@
-package com.ondot.ondot_back.domain.organization.dto;
+package com.ondot.ondot_back.domain.organization.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SigninRequest { //로그인
+public class SigninRequest {
     private String organizationId;
     private String password;
 }

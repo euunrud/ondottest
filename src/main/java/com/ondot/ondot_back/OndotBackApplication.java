@@ -7,9 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 public class OndotBackApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(OndotBackApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OndotBackApplication.class, args);
+    }
 
 }

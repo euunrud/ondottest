@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ondot.ondot_back.domain.organization.dto.OrganizationGetResponse;
-import com.ondot.ondot_back.domain.organization.dto.OrganizationUpdateRequest;
-import com.ondot.ondot_back.domain.organization.dto.OrganizationUpdateResponse;
+import com.ondot.ondot_back.domain.organization.dto.response.OrganizationGetResponse;
+import com.ondot.ondot_back.domain.organization.dto.request.OrganizationUpdateRequest;
+import com.ondot.ondot_back.domain.organization.dto.response.OrganizationUpdateResponse;
 import com.ondot.ondot_back.domain.organization.entity.Organization;
 import com.ondot.ondot_back.domain.organization.service.OrganizationService;
 import com.ondot.ondot_back.global.common.ApiResponse;

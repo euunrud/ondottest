@@ -10,36 +10,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-//로그인 진행이 완료가 되면 session을 만들어줍니다. (Security ContextHolder)
-//오브젝트 타입=> Authentication 타입 객체
-//Authentication 안에 User 정보가 있어야 됨.
-//User오브젝트타입=>UserDetails타입 객체
-//Security Session => Authentication=>UserDetails(PrincipalDetails)
-
 @Data
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Organization orgaization;
     private Map<String, Object> attributes;
 
-    //일반 시큐리티 로그인시 사용
     public PrincipalDetails(Organization orgaization) {
         this.orgaization = orgaization;
     }
-    //OAuth2.0 로그인시 사용
+
     public PrincipalDetails(Organization orgaization,  Map<String, Object> attributes) {
         this.orgaization = orgaization;
         this.attributes = attributes;
     }
 
-    //해당 User의 권한을 리턴하는 곳
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collect = new ArrayList<>();
         collect.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-//                return orgaization.getRole();
                 return null;
             }
         });
@@ -56,39 +47,31 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return orgaization.getName();
     }
 
-    // 계정 만료 (true = 만료 아님)
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // 계정 잠금 여부
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // 비밀번호가 기간이 지났니 오래사용한거 아니니 여부
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // 계정 활성화 여부
     @Override
     public boolean isEnabled() {
-        //사이트에서 1년동안 회원 로그인을 안하면 휴먼 계정 설정하려면 추가
-        //현재시간 - 로긴시간 => 1년을 초과하면 return false;
-        return true; // 활성화
+        return true;
     }
 
-    // 리소스 서버로 부터 받는 회원정보
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    // orgaization의 PrimaryKey
     @Override
     public String getName() {
         return orgaization.getId()+"";
