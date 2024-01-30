@@ -1,16 +1,16 @@
 package com.ondot.ondot_back.global.config;
 
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
+import com.ondot.ondot_back.domain.organization.repository.OrganizationJpaRepository;
 import com.ondot.ondot_back.domain.organization.service.AuthService;
 import com.ondot.ondot_back.global.config.jwt.JwtTokenProvider;
 import com.ondot.ondot_back.global.config.jwt.handler.CustomAccessDeniedHandler;
 import com.ondot.ondot_back.global.config.jwt.handler.CustomAuthenticationEntryPoint;
 import com.ondot.ondot_back.global.config.jwt.handler.OAuth2SuccessHandler;
 import com.ondot.ondot_back.global.config.oauth.PrincipalOAuth2DetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,20 +18,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final PrincipalOAuth2DetailsService principalOAuth2DetailsService;
     private AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
-
-    public SecurityConfig(PrincipalOAuth2DetailsService principalOAuth2DetailsService, @Lazy AuthService authService, JwtTokenProvider jwtTokenProvider) {
-        this.principalOAuth2DetailsService = principalOAuth2DetailsService;
-        this.authService = authService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
+    private final CorsConfig corsConfig;
+    private final OrganizationJpaRepository organizationRepository;
     @Bean
     public OrganizationType organizationType() {
         return OrganizationType.STUDENT_COUNCIL;
@@ -52,11 +49,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((csrfConfig) -> csrfConfig.disable())
+//                .addFilterBefore(corsConfig.corsFilter(), CorsFilter.class)
+//                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), organizationRepository))
                 .authorizeHttpRequests((authorizeRequests) ->
                                 authorizeRequests
-                                        .requestMatchers("/login/**", "/api/v1/auth/signin/**", "/api/v1/auth/signup/**", "/api/v1/oauth2/google/**", "/oauth2/**").permitAll()
-                                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                        .anyRequest().authenticated()
+//                                        .requestMatchers("/login/**", "/api/v1/auth/signin/**", "/api/v1/auth/signup/**", "/api/v1/oauth2/google/**", "/oauth2/**").permitAll()
+//                                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+//                                        .anyRequest().authenticated()
+                                          .anyRequest().permitAll()
+
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -70,7 +71,6 @@ public class SecurityConfig {
                                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                                 .accessDeniedHandler(new CustomAccessDeniedHandler())
                 );
-
         return http.build();
     }
 }

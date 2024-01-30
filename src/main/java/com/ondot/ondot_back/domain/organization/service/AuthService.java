@@ -3,6 +3,7 @@ package com.ondot.ondot_back.domain.organization.service;
 
 import com.ondot.ondot_back.domain.organization.dto.request.AuthSignupRequest;
 import com.ondot.ondot_back.domain.organization.dto.request.SigninRequest;
+import com.ondot.ondot_back.domain.organization.dto.response.OrganizationGetResponse;
 import com.ondot.ondot_back.domain.organization.dto.response.SigninResponse;
 import com.ondot.ondot_back.domain.organization.entity.Organization;
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
@@ -20,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 //@Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -61,7 +63,6 @@ public class AuthService {
         return new SigninResponse(accessToken, " ");
     }
 
-
     public SigninResponse signinAuto(SigninRequest signinRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(signinRequest.getOrganizationId(), signinRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -86,4 +87,17 @@ public class AuthService {
         }
         return organizationid;
     }
+
+//    public void updateProfile(Organization organization, String profileUrl) {
+//        organization.setProfileUrl(profileUrl);
+//        organizationJpaRepository.save(organization);
+//    }
+//
+//    public void changePassword(Organization organization, String password) {
+//        String encodedPassword = passwordEncoder.encode(password);
+//        organization.setPassword(encodedPassword);
+//        organizationJpaRepository.save(organization);
+//    }
+
+
 }

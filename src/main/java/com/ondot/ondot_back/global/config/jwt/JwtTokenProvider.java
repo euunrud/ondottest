@@ -1,5 +1,6 @@
 package com.ondot.ondot_back.global.config.jwt;
 
+import com.ondot.ondot_back.global.config.auth.PrincipalDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.security.Principal;
 import java.util.Date;
+import java.util.Objects;
 
 @Component
 @Getter
@@ -84,5 +87,14 @@ public class JwtTokenProvider {
 
         Long now = new Date().getTime();
         return expiration.getTime() - now;
+    }
+
+    public static String getUserIdFromPrincipal(PrincipalDetails principal) {
+        if (Objects.isNull(principal)) {
+            //
+//            throw new InvalidAuthException();
+        }
+        System.out.println(principal.getUsername());
+        return principal.getUsername();
     }
 }

@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 public class PrincipalDetailsService implements UserDetailsService {
 
     @Autowired
-    private OrganizationJpaRepository organizationJpaRepository;
+    private OrganizationJpaRepository organizationRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Organization organization = organizationJpaRepository.findSingleByOrganizationId(username);
+        Organization organization = organizationRepository.findSingleByOrganizationId(username);
         if(organization == null){
             return null;
         } else {
