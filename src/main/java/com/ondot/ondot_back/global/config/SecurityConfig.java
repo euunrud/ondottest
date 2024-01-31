@@ -3,7 +3,6 @@ package com.ondot.ondot_back.global.config;
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
 import com.ondot.ondot_back.domain.organization.repository.OrganizationJpaRepository;
 import com.ondot.ondot_back.domain.organization.service.AuthService;
-import com.ondot.ondot_back.global.config.jwt.JwtAuthorizationFilter;
 import com.ondot.ondot_back.global.config.jwt.JwtTokenProvider;
 import com.ondot.ondot_back.global.config.jwt.handler.CustomAccessDeniedHandler;
 import com.ondot.ondot_back.global.config.jwt.handler.CustomAuthenticationEntryPoint;
@@ -30,8 +29,6 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CorsConfig corsConfig;
     private final OrganizationJpaRepository organizationRepository;
-    private final AuthenticationManager authenticationManager;
-
     @Bean
     public OrganizationType organizationType() {
         return OrganizationType.STUDENT_COUNCIL;
@@ -52,14 +49,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((csrfConfig) -> csrfConfig.disable())
-                .addFilter(corsConfig.corsFilter())
-                .addFilter(new JwtAuthorizationFilter(authenticationManager, organizationRepository))
+//                .addFilterBefore(corsConfig.corsFilter(), CorsFilter.class)
+//                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), organizationRepository))
                 .authorizeHttpRequests((authorizeRequests) ->
                                 authorizeRequests
-                                        .requestMatchers("/login/**", "/api/v1/auth/signin/**", "/api/v1/auth/signup/**", "/api/v1/oauth2/google/**", "/oauth2/**").permitAll()
-                                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                        .anyRequest().authenticated()
-//                                          .anyRequest().permitAll()
+//                                        .requestMatchers("/login/**", "/api/v1/auth/signin/**", "/api/v1/auth/signup/**", "/api/v1/oauth2/google/**", "/oauth2/**").permitAll()
+//                                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+//                                        .anyRequest().authenticated()
+                                          .anyRequest().permitAll()
 
                 )
                 .sessionManagement(sessionManagement ->
