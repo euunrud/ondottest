@@ -3,6 +3,8 @@ package com.ondot.ondot_back.global.config;
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
 import com.ondot.ondot_back.domain.organization.repository.OrganizationJpaRepository;
 import com.ondot.ondot_back.domain.organization.service.AuthService;
+import com.ondot.ondot_back.global.config.jwt.JwtAuthenticationFilter;
+import com.ondot.ondot_back.global.config.jwt.JwtAuthorizationFilter;
 import com.ondot.ondot_back.global.config.jwt.JwtTokenProvider;
 import com.ondot.ondot_back.global.config.jwt.handler.CustomAccessDeniedHandler;
 import com.ondot.ondot_back.global.config.jwt.handler.CustomAuthenticationEntryPoint;
@@ -11,7 +13,9 @@ import com.ondot.ondot_back.global.config.oauth.PrincipalOAuth2DetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,21 +27,18 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Lazy
 public class SecurityConfig {
     private final PrincipalOAuth2DetailsService principalOAuth2DetailsService;
     private AuthService authService;
+    private AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final CorsConfig corsConfig;
     private final OrganizationJpaRepository organizationRepository;
+
     @Bean
     public OrganizationType organizationType() {
         return OrganizationType.STUDENT_COUNCIL;
-    }
-
-    @Bean
-    AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -45,18 +46,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf((csrfConfig) -> csrfConfig.disable())
-//                .addFilterBefore(corsConfig.corsFilter(), CorsFilter.class)
-//                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), organizationRepository))
+                .addFilter(corsConfig.corsFilter())
+                .addFilter(new JwtAuthenticationFilter(jwtTokenProvider))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager, organizationRepository))
                 .authorizeHttpRequests((authorizeRequests) ->
-                                authorizeRequests
-//                                        .requestMatchers("/login/**", "/api/v1/auth/signin/**", "/api/v1/auth/signup/**", "/api/v1/oauth2/google/**", "/oauth2/**").permitAll()
-//                                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-//                                        .anyRequest().authenticated()
-                                          .anyRequest().permitAll()
+                        authorizeRequests
+                                .requestMatchers("/login/**", "/api/v1/auth/signin/**", "/api/v1/auth/signup/**", "/api/v1/oauth2/google/**", "/oauth2/**").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .anyRequest().authenticated()
 
                 )
                 .sessionManagement(sessionManagement ->
@@ -71,6 +71,9 @@ public class SecurityConfig {
                                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                                 .accessDeniedHandler(new CustomAccessDeniedHandler())
                 );
-        return http.build();
+    }
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return authenticationManagerBean();
     }
 }
