@@ -1,6 +1,5 @@
 package com.ondot.ondot_back.global.config.jwt;
 
-import com.ondot.ondot_back.global.config.auth.PrincipalDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -89,12 +88,11 @@ public class JwtTokenProvider {
         return expiration.getTime() - now;
     }
 
-    public static String getUserIdFromPrincipal(PrincipalDetails principal) {
+    public static Long getUserIdFromPrincipal(Principal principal) {
         if (Objects.isNull(principal)) {
             //
 //            throw new InvalidAuthException();
         }
-        System.out.println(principal.getUsername());
-        return principal.getUsername();
+        return Long.valueOf(principal.getName());
     }
 }

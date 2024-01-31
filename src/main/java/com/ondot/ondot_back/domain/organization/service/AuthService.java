@@ -8,6 +8,7 @@ import com.ondot.ondot_back.domain.organization.dto.response.SigninResponse;
 import com.ondot.ondot_back.domain.organization.entity.Organization;
 import com.ondot.ondot_back.domain.organization.enums.OrganizationType;
 import com.ondot.ondot_back.domain.organization.repository.OrganizationJpaRepository;
+import com.ondot.ondot_back.domain.organization.repository.OrganizationRepository;
 import com.ondot.ondot_back.global.common.exception.CustomException;
 import com.ondot.ondot_back.global.config.auth.PrincipalDetails;
 import com.ondot.ondot_back.global.config.jwt.JwtTokenProvider;
@@ -34,6 +35,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final OrganizationType organizationType;
+    private final OrganizationJpaRepository organizationRepository;
 
     @Transactional
     public Organization createUser(AuthSignupRequest authsignupRequest) {
@@ -86,6 +88,10 @@ public class AuthService {
             organizationJpaRepository.save(organization);
         }
         return organizationid;
+    }
+
+    public Organization getOrganization(final Long id) {
+        return organizationRepository.findById(id).orElseThrow(() -> new RuntimeException("Organization not found with id: " + id));
     }
 
 //    public void updateProfile(Organization organization, String profileUrl) {

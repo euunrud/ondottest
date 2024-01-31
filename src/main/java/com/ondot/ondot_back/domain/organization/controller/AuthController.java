@@ -11,6 +11,7 @@ import com.ondot.ondot_back.domain.organization.service.AuthService;
 import com.ondot.ondot_back.global.config.auth.PrincipalDetails;
 import com.ondot.ondot_back.global.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,10 +45,22 @@ public class AuthController {
         return ApiResponse.onSuccess(response);
     }
 
+    @GetMapping("/user")
+    public String user(Authentication authentication, @AuthenticationPrincipal PrincipalDetails userDetails) {
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println("principal : "+principal.getOrgaization().getId());
+        System.out.println("principal : "+principal.getOrgaization().getName());
+        System.out.println("principal : "+principal.getOrgaization().getPassword());
+
+        System.out.println("principal : " + userDetails.getPassword());
+
+
+        return "user";
+    }
 
     @GetMapping("/mypage")
-    public ApiResponse<OrganizationGetResponse> getOrganization(@AuthenticationPrincipal PrincipalDetails principal) {
-        Organization findOrganization = organizationService.getOrganization(JwtTokenProvider.getUserIdFromPrincipal(principal));
+    public ApiResponse<OrganizationGetResponse> getOrganization(final Principal principal) {
+        Organization findOrganization = authService.getOrganization(JwtTokenProvider.getUserIdFromPrincipal(principal));
         return ApiResponse.onSuccess(
                 OrganizationGetResponse.from(findOrganization)
         );
@@ -87,18 +100,7 @@ public class AuthController {
 //    // Tip : JWT를 사용하면 UserDetailsService를 호출하지 않기 때문에 @AuthenticationPrincipal 사용 불가능.
 //    // 왜냐하면 @AuthenticationPrincipal은 UserDetailsService에서 리턴될 때 만들어지기 때문이다.
 //
-//    @GetMapping("/user")
-//    public String user(@Authentication authentication, @AuthenticationPrincipal PrincipalDetails userDetails) {
-//        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-//        System.out.println("principal : "+principal.getOrgaization().getId());
-//        System.out.println("principal : "+principal.getOrgaization().getName());
-//        System.out.println("principal : "+principal.getOrgaization().getPassword());
-//
-//        System.out.println("principal : " + userDetails.getPassword());
-//
-//
-//        return "user";
-//    }
+
 
 
 }
